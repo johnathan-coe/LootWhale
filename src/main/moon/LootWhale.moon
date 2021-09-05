@@ -4,9 +4,9 @@ Scoreboard = require("Scoreboard")
 
 class LootWhale
   new: (p) =>
-    -- Table of booleans
     -- If a user opens a chest and their corresponding value is true, ownership is transferred
     @ownNextChest = {}
+    
     @chestManager = ChestManager(p.getStorageObject("LootWhale.json"))
     @scoreboard = Scoreboard()
 
@@ -14,29 +14,34 @@ class LootWhale
     p.registerEvent("InventoryOpenEvent", self\invOpened)
     p.registerEvent("InventoryCloseEvent", self\invClosed)
 
+    @updateScoreboard()
+
     -- Done
     logger.info("LootWhaling!")
 
-  invClosed: (e) =>
+  updateScoreboard: () =>
     -- Get and display sum of values for users
     valTable = @chestManager\getValueTable()
     @scoreboard\show(valTable)
 
+  invClosed: (e) =>
     -- Get and display owner of chest
     inv = Inventory(e\getInventory())
-    owner = @chestManager\getOwner(inv)
-    owner = "nobody!" if owner == nil
+    owner = @chestManager\getOwner(inv) .. "'s"
+    owner = "an unclaimed" if owner == nil
     
-    e\getPlayer()\sendMessage("Closed chest owned by #{owner}")
+    e\getPlayer()\sendMessage("Closed #{owner} chest!")
+    @updateScoreboard()
 
   invOpened: (e) =>
     inv = Inventory(e\getInventory())
     player = e\getPlayer()
 
-    -- If a user has opened a chest and their ownNextChest is true
+    -- Claim chest
     if (inv\isChest(inv) and @ownNextChest[player\getName()] == true)
-      -- Change ownership
       @chestManager\setOwnership(inv, player)
+      player\sendMessage("Claimed chest!")
+
       @ownNextChest[player\getName()] = false
 
   ownChest: (e) =>

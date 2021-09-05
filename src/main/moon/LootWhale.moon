@@ -43,15 +43,15 @@ class LootWhale
     player = e\getPlayer()
 
     -- Claim chest
-    if (@ownNextChest[player\getName()] == true)
+    if (@ownNextChest[player] == true)
       @chestManager\setOwnership(inv, player)
-      @ownNextChest[player\getName()] = false
+      @ownNextChest[player] = false
 
       player\sendMessage("Claimed chest!")
 
   ownChest: (e) =>
     player = e.getSender()
-    @ownNextChest[player\getName()] = true
+    @ownNextChest[player] = true
 
     player\sendMessage("You will own the next chest you open!")
 

@@ -1,6 +1,7 @@
 Material = javaImport("$.Material")
 InventoryType = javaImport("$.event.inventory.InventoryType")
 WEIGHTS = require("weights")
+Location = require("util.Location")
 
 class Inventory
     new: (inv) =>
@@ -24,5 +25,11 @@ class Inventory
 
     isChest: =>
         return @inv\getType() == InventoryType.CHEST
+
+    serializeLoc: =>
+        return Location.toJSON(@inv\getLocation())
+
+    fromBlock: (block) ->
+        return Inventory(block\getState()\getSnapshotInventory())
 
 return Inventory

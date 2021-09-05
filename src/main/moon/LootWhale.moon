@@ -1,5 +1,6 @@
 Inventory = require("Inventory")
 ChestManager = require("ChestManager")
+Scoreboard = require("Scoreboard")
 
 class LootWhale
   new: (p) =>
@@ -7,6 +8,7 @@ class LootWhale
     -- If a user opens a chest and their corresponding value is true, ownership is transferred
     @ownNextChest = {}
     @chestManager = ChestManager(p.getStorageObject("LootWhale.json"))
+    @scoreboard = Scoreboard()
 
     p.addCommand({name: "ownchest"}, self\ownChest)
     p.registerEvent("InventoryOpenEvent", self\invOpened)
@@ -16,9 +18,11 @@ class LootWhale
     logger.info("LootWhaling!")
 
   invClosed: (e) =>
-    -- Get sum of values for user
+    -- Get and display sum of values for users
     valTable = @chestManager\getValueTable()
+    @scoreboard\show(valTable)
 
+    -- Get and display owner of chest
     inv = Inventory(e\getInventory())
     owner = @chestManager\getOwner(inv)
     owner = "nobody!" if owner == nil

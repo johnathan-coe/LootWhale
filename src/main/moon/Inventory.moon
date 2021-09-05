@@ -7,6 +7,9 @@ class Inventory
     new: (inv) =>
         @inv = inv
 
+    fromBlock: (block) ->
+        return Inventory(block\getState()\getInventory())
+
     getWeight: =>
         weight = 0
 
@@ -28,8 +31,5 @@ class Inventory
 
     serializeLoc: =>
         return Location.toJSON(@inv\getLocation())
-
-    fromBlock: (block) ->
-        return Inventory(block\getState()\getInventory())
 
 return Inventory

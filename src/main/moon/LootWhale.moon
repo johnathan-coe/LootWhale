@@ -8,45 +8,51 @@ class LootWhale
     @ownNextChest = {}
     
     @chestManager = ChestManager(p.getStorageObject("LootWhale.json"))
-    @scoreboard = Scoreboard()
 
     p.addCommand({name: "ownchest"}, self\ownChest)
     p.registerEvent("InventoryOpenEvent", self\invOpened)
     p.registerEvent("InventoryCloseEvent", self\invClosed)
 
-    @updateScoreboard()
-
+    -- Wait until world load for scoreboard init
+    p.onEnable(() ->
+      @scoreboard = Scoreboard()
+      @updateScoreboard()
+    )
+    
     -- Done
     logger.info("LootWhaling!")
 
   updateScoreboard: () =>
-    -- Get and display sum of values for users
-    valTable = @chestManager\getValueTable()
-    @scoreboard\show(valTable)
+    @scoreboard\show(@chestManager\getValueTable())
 
   invClosed: (e) =>
     -- Get and display owner of chest
     inv = Inventory(e\getInventory())
-    owner = @chestManager\getOwner(inv) .. "'s"
-    owner = "an unclaimed" if owner == nil
-    
+    return if not inv\isChest()
+
+    owner = @chestManager\getOwner(inv)
+    owner = if owner == nil then "an unclaimed" else owner .. "'s"
     e\getPlayer()\sendMessage("Closed #{owner} chest!")
+    
     @updateScoreboard()
 
   invOpened: (e) =>
     inv = Inventory(e\getInventory())
+    return if not inv\isChest()
+
     player = e\getPlayer()
 
     -- Claim chest
-    if (inv\isChest(inv) and @ownNextChest[player\getName()] == true)
+    if (@ownNextChest[player\getName()] == true)
       @chestManager\setOwnership(inv, player)
-      player\sendMessage("Claimed chest!")
-
       @ownNextChest[player\getName()] = false
+
+      player\sendMessage("Claimed chest!")
 
   ownChest: (e) =>
     player = e.getSender()
     @ownNextChest[player\getName()] = true
+
     player\sendMessage("You will own the next chest you open!")
 
 return LootWhale

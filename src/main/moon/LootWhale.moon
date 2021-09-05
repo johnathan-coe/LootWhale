@@ -30,9 +30,9 @@ class LootWhale
     inv = Inventory(e\getInventory())
     return if not inv\isChest()
 
-    owner = @chestManager\getOwner(inv)
-    owner = if owner == nil then "an unclaimed" else owner .. "'s"
-    e\getPlayer()\sendMessage("Closed #{owner} chest!")
+    -- Tell the user if this chest doesn't have an owner
+    if @chestManager\getOwner(inv) == nil
+      e\getPlayer()\sendMessage("Stray chest :(")
     
     @updateScoreboard()
 

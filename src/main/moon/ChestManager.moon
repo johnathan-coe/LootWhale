@@ -3,6 +3,7 @@ Location = require("util.Location")
 Mat = javaImport("$.Material")
 Gson = newInstance("com.google.gson.Gson", {})
 Map = javaImport "java.util.Map"
+NameTag = require("util.NameTag")
 
 class ChestManager
     new: (storage) =>
@@ -46,6 +47,8 @@ class ChestManager
                 @owners[locJSON] = nil
                 continue
             
+            NameTag.setFor(block, "#{name}'s Chest")
+
             -- Get inventory from block
             inv = Inventory.fromBlock(block)
 

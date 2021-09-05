@@ -30,6 +30,6 @@ class Inventory
         return Location.toJSON(@inv\getLocation())
 
     fromBlock: (block) ->
-        return Inventory(block\getState()\getSnapshotInventory())
+        return Inventory(block\getState()\getInventory())
 
 return Inventory

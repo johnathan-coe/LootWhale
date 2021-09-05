@@ -48,7 +48,7 @@ class ChestManager
             
             -- Get inventory from block
             inv = Inventory.fromBlock(block)
-            
+
             -- Increment sum
             values[name] = 0 if values[name] == nil
             values[name] += inv\getWeight()

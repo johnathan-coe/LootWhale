@@ -10,6 +10,9 @@ class Inventory
     fromBlock: (block) ->
         return Inventory(block\getState()\getInventory())
 
+    deserialize: (JSON) ->
+        return Inventory.fromBlock(Location.fromJSON(JSON)\getBlock())
+
     getWeight: =>
         weight = 0
 

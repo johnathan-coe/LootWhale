@@ -32,11 +32,7 @@ class ChestManager
 
         -- For every registered chest
         for locJSON, name in pairs(@owners)
-            location = Location.fromJSON(locJSON)
-            block = location\getBlock()
-            
-            -- Get inventory from block
-            inv = Inventory.fromBlock(block)
+            inv = Inventory.deserialize(locJSON)
 
             -- Increment sum
             values[name] = 0 if values[name] == nil

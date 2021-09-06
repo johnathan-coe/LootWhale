@@ -13,7 +13,11 @@ class ChestManager
     -- Set ownership of an inventory
     setOwnership: (inv, player) =>
         @processChestChanges()
-        @owners[inv\serializeLoc()] = player\getName()
+
+        name = player\getName()
+        @owners[inv\serializeLoc()] = name
+        inv\setTitle("#{name}'s Chest")
+        
         @persist()
 
     -- Get the owner of an inventory
@@ -33,7 +37,6 @@ class ChestManager
             
             -- Get inventory from block
             inv = Inventory.fromBlock(block)
-            inv\setTitle("#{name}'s Chest")
 
             -- Increment sum
             values[name] = 0 if values[name] == nil

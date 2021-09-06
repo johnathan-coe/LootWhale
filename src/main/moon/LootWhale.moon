@@ -46,15 +46,16 @@ class LootWhale
 
     -- Claim chest
     if (@ownNextChest[player] == true)
-      @chestManager\setOwnership(inv, player)
       @ownNextChest[player] = false
+      @chestManager\setOwnership(inv, player)
 
       player\sendMessage("Claimed chest!")
+      e\setCancelled(true) -- Don't show inventory
 
   ownChest: (e) =>
     player = e.getSender()
     @ownNextChest[player] = true
 
-    player\sendMessage("You will own the next chest you open!")
+    player\sendMessage("You will own the next chest you right-click!")
 
 return LootWhale

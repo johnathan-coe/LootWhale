@@ -48,12 +48,15 @@ class ChestManager
         @persist()
         return values
 
-    ensureLocationCongruency: (location, inventory) =>
-        -- Get holder
-        if (inventory\serializeLoc() != location)
+    ensureLocationCongruency: (locJSON, inventory) =>
+        -- If a single chest has been merged, update its location to the
+        -- location of the DoubleChest
+        if (inventory\serializeLoc() != locJSON)
             print("Chest changed location!")
+            @owners[inventory\serializeLoc()] = @owners[locJSON]
+            @owners[locJSON] = nil
 
-        -- Replace location with double chest location if holder is double chest
+        @persist()
 
     -- Pull saved data from disk
     pullFromFile: () =>

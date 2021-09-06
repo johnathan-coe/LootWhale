@@ -48,6 +48,7 @@ class LootWhale
     if (@ownNextChest[player] == true)
       @ownNextChest[player] = false
       @chestManager\setOwnership(inv, player)
+      @updateScoreboard()
 
       player\sendMessage("Claimed chest!")
       e\setCancelled(true) -- Don't show inventory

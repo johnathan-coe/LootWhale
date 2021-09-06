@@ -1,7 +1,6 @@
 Inventory = require("Inventory")
 Location = require("util.Location")
 Mat = javaImport("$.Material")
-NameTag = require("util.NameTag")
 
 class ChestManager
     new: (storage) =>
@@ -32,10 +31,9 @@ class ChestManager
             location = Location.fromJSON(locJSON)
             block = location\getBlock()
             
-            NameTag.setFor(block, "#{name}'s Chest")
-
             -- Get inventory from block
             inv = Inventory.fromBlock(block)
+            inv\setTitle("#{name}'s Chest")
 
             -- Increment sum
             values[name] = 0 if values[name] == nil

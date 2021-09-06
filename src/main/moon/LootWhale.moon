@@ -34,7 +34,7 @@ class LootWhale
 
     -- Tell the user if this chest doesn't have an owner
     if @chestManager\getOwner(inv) == nil
-      e\getPlayer()\sendMessage("Stray chest :(")
+      inv\setTitle("A Stray Chest")
     
     @updateScoreboard()
 

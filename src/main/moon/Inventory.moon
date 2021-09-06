@@ -29,6 +29,11 @@ class Inventory
     isChest: =>
         return @inv\getType() == InventoryType.CHEST
 
+    setTitle: (name) =>
+        state = @inv\getLocation()\getBlock()\getState()
+        state\setCustomName(name)
+        state\update()
+
     serializeLoc: =>
         return Location.toJSON(@inv\getLocation())
 

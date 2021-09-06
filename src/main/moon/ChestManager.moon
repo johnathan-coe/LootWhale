@@ -39,12 +39,21 @@ class ChestManager
             -- Get inventory from block
             inv = Inventory.fromBlock(block)
 
+            @ensureLocationCongruency(locJSON, inv)
+
             -- Increment sum
             values[name] = 0 if values[name] == nil
             values[name] += inv\getWeight()
 
         @persist()
         return values
+
+    ensureLocationCongruency: (location, inventory) =>
+        -- Get holder
+        if (inventory\serializeLoc() != location)
+            print("Chest changed location!")
+
+        -- Replace location with double chest location if holder is double chest
 
     -- Pull saved data from disk
     pullFromFile: () =>

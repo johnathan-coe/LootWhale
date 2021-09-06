@@ -1,13 +1,15 @@
 Inventory = require("Inventory")
 ChestManager = require("ChestManager")
 Scoreboard = require("Scoreboard")
+Storage = require("util.Storage")
 
 class LootWhale
   new: (p) =>
     -- If a user opens a chest and their corresponding value is true, ownership is transferred
     @ownNextChest = {}
     
-    @chestManager = ChestManager(p.getStorageObject("LootWhale.json"))
+    storage = Storage(p.getStorageObject("LootWhale.json"))
+    @chestManager = ChestManager(storage)
 
     p.addCommand({name: "ownchest"}, self\ownChest)
     p.registerEvent("InventoryOpenEvent", self\invOpened)

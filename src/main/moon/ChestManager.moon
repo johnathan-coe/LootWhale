@@ -47,6 +47,8 @@ class ChestManager
             inventory = Inventory.deserialize(locJSON)
             continue if not inventory\isChest()
 
+            inventory\setTitle("#{name}'s Chest")
+
             -- Ensure location JSON is up to date
             -- TODO: Retain ownership if they delete the right part of a DoubleChest
             locJSON = inventory\serializeLoc()

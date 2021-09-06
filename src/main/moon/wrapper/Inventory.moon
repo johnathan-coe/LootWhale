@@ -7,13 +7,13 @@ class Inventory
     new: (inv) =>
         @inv = inv
 
+    -- Deserialise from chest location JSON
     deserialize: (JSON) ->
         location = Location.fromJSON(JSON)
         block = location\getBlock()
         
         if (block\getType() != Material\getMaterial("CHEST"))
-            @inv = nil
-            return
+            return Inventory(nil)
             
         return Inventory(block\getState()\getInventory())
 

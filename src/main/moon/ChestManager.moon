@@ -1,8 +1,6 @@
 Inventory = require("Inventory")
 Location = require("util.Location")
 Mat = javaImport("$.Material")
-Gson = newInstance("com.google.gson.Gson", {})
-Map = javaImport "java.util.Map"
 NameTag = require("util.NameTag")
 
 class ChestManager
@@ -12,17 +10,6 @@ class ChestManager
         -- Table mapping serialised locations to names
         @owners = {}
         @pullFromFile()
-
-    pullFromFile: () =>
-        -- Pull owners table from storage as Gson.JSONPrimitive
-        chests = @storage\getValue("chests")
-
-        -- If not yet persisted
-        return if chests == nil
-
-        -- Deserialize to map
-        map = Gson\fromJson(chests\getAsString(), Map)
-        @owners = util.getTableFromMap(map)
         
     -- Set ownership of an inventory
     setOwnership: (inv, player) =>
@@ -59,14 +46,12 @@ class ChestManager
         @persist()
         return values
 
+    -- Pull saved data from disk
+    pullFromFile: () =>
+        @owners = @storage\getMapValueAsTable("chests")
+
     -- Push current ownership data to disk
     persist: () =>
-        -- Add to a JsonObj
-        jObj = newInstance("com.google.gson.JsonObject")
-        for loc, name in pairs(@owners)
-            jObj\addProperty(loc, name)
-
-        @storage\setValue("chests", jObj\toString())
-        @storage\save()
+        @storage.setValueFromMap("chests", @owners)
 
 return ChestManager

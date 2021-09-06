@@ -1,7 +1,7 @@
 {
     whitelist_globals: {
       ["."]: {
-        "logger", "plugin", "newInstance" -- Lukkit
+        "logger", "plugin", "newInstance", "util" -- Lukkit
         "javaImport" -- main.lua
       },
       ["test/*"]: {

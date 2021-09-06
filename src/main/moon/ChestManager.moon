@@ -13,15 +13,18 @@ class ChestManager
         
     -- Set ownership of an inventory
     setOwnership: (inv, player) =>
+        @processChestChanges()
         @owners[inv\serializeLoc()] = player\getName()
         @persist()
 
     -- Get the owner of an inventory
     getOwner: (inv) =>
+        @processChestChanges()
         return @owners[inv\serializeLoc()]
 
     -- Get values
     getValueTable: () =>
+        @processChestChanges()
         values = {}
 
         -- For every registered chest
@@ -29,17 +32,10 @@ class ChestManager
             location = Location.fromJSON(locJSON)
             block = location\getBlock()
             
-            -- Ensure the block is still a chest
-            if (block\getType() != Mat\getMaterial("CHEST"))
-                @owners[locJSON] = nil
-                continue
-            
             NameTag.setFor(block, "#{name}'s Chest")
 
             -- Get inventory from block
             inv = Inventory.fromBlock(block)
-
-            @ensureLocationCongruency(locJSON, inv)
 
             -- Increment sum
             values[name] = 0 if values[name] == nil
@@ -48,14 +44,22 @@ class ChestManager
         @persist()
         return values
 
-    ensureLocationCongruency: (locJSON, inventory) =>
-        -- If a single chest has been merged, update its location to the
-        -- location of the DoubleChest
-        if (inventory\serializeLoc() != locJSON)
-            print("Chest changed location!")
-            @owners[inventory\serializeLoc()] = @owners[locJSON]
-            @owners[locJSON] = nil
+    -- Processes chest merges and deletions
+    processChestChanges: =>
+        newOwners = {}
 
+        for locJSON, name in pairs(@owners)
+            location = Location.fromJSON(locJSON)
+            block = location\getBlock()
+            continue if (block\getType() != Mat\getMaterial("CHEST"))
+            inventory = Inventory.fromBlock(block)
+
+            -- Ensure location JSON is up to date
+            -- TODO: Retain ownership if they delete the right part of a DoubleChest
+            locJSON = inventory\serializeLoc()
+            newOwners[locJSON] = name
+
+        @owners = newOwners
         @persist()
 
     -- Pull saved data from disk

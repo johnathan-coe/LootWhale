@@ -1,6 +1,6 @@
 -- Points for each item
 return {COAL: 1,
-        LEATHER: 1,
+        LEATHER: 2,
         REDSTONE: 2,
         QUARTZ: 3,
         LAPIS_LAZULI: 3,

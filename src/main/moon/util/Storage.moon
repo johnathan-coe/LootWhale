@@ -9,7 +9,7 @@ class Storage
 
     getValueAsTable: (key) =>
         -- Pull owners table from storage as Gson.JSONPrimitive
-        primitive = @storage\getValue(key)
+        primitive = @storageObject\getValue(key)
 
         -- If not yet persisted
         return {} if primitive == nil
@@ -24,7 +24,7 @@ class Storage
         for k, v in pairs(t)
             jObj\addProperty(k, v)
 
-        @storage\setValue(key, jObj\toString())
-        @storage\save()
+        @storageObject\setValue(key, jObj\toString())
+        @storageObject\save()
 
 return Storage

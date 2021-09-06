@@ -48,10 +48,10 @@ class ChestManager
 
     -- Pull saved data from disk
     pullFromFile: () =>
-        @owners = @storage\getMapValueAsTable("chests")
+        @owners = @storage\getValueAsTable("chests")
 
     -- Push current ownership data to disk
     persist: () =>
-        @storage.setValueFromMap("chests", @owners)
+        @storage\setValueFromTable("chests", @owners)
 
 return ChestManager

@@ -1,7 +1,7 @@
-Inventory = require("Inventory")
 ChestManager = require("ChestManager")
-Scoreboard = require("Scoreboard")
-Storage = require("util.Storage")
+Inventory = require("wrapper.Inventory")
+Scoreboard = require("wrapper.Scoreboard")
+Storage = require("wrapper.Storage")
 
 class LootWhale
   new: (p) =>

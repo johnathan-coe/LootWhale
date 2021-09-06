@@ -1,17 +1,21 @@
-Material = javaImport("$.Material")
-InventoryType = javaImport("$.event.inventory.InventoryType")
 WEIGHTS = require("weights")
 Location = require("util.Location")
+Material = javaImport("$.Material")
+InventoryType = javaImport("$.event.inventory.InventoryType")
 
 class Inventory
     new: (inv) =>
         @inv = inv
 
-    fromBlock: (block) ->
-        return Inventory(block\getState()\getInventory())
-
     deserialize: (JSON) ->
-        return Inventory.fromBlock(Location.fromJSON(JSON)\getBlock())
+        location = Location.fromJSON(JSON)
+        block = location\getBlock()
+        
+        if (block\getType() != Material\getMaterial("CHEST"))
+            @inv = nil
+            return
+            
+        return Inventory(block\getState()\getInventory())
 
     getWeight: =>
         weight = 0
@@ -30,6 +34,7 @@ class Inventory
         return weight
 
     isChest: =>
+        return false if @inv == nil
         return @inv\getType() == InventoryType.CHEST
 
     setTitle: (name) =>

@@ -1,6 +1,4 @@
-Inventory = require("Inventory")
-Location = require("util.Location")
-Mat = javaImport("$.Material")
+Inventory = require("wrapper.Inventory")
 
 class ChestManager
     new: (storage) =>
@@ -45,11 +43,9 @@ class ChestManager
     processChestChanges: =>
         newOwners = {}
 
-        for locJSON, name in pairs(@owners)
-            location = Location.fromJSON(locJSON)
-            block = location\getBlock()
-            continue if (block\getType() != Mat\getMaterial("CHEST"))
-            inventory = Inventory.fromBlock(block)
+        for locJSON, name in pairs(@owners)    
+            inventory = Inventory.deserialize(locJSON)
+            continue if not inventory\isChest()
 
             -- Ensure location JSON is up to date
             -- TODO: Retain ownership if they delete the right part of a DoubleChest

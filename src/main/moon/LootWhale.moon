@@ -3,6 +3,7 @@ Inventory = require("wrapper.Inventory")
 Scoreboard = require("wrapper.Scoreboard")
 Storage = require("wrapper.Storage")
 WEIGHTS = require("weights")
+String = require("util.String")
 
 class LootWhale
   new: (p) =>
@@ -64,8 +65,14 @@ class LootWhale
   lootWeights: (e) =>
     player = e.getSender()
 
+    -- Sort keys by item weight
+    keys = {}
+    for key in pairs(WEIGHTS) do table.insert(keys, key)
+    table.sort(keys, (a, b) -> WEIGHTS[a] < WEIGHTS[b])
+
+    -- Print, converting material names to title case
     player\sendMessage("Current item weights:")
-    for item, weight in pairs(WEIGHTS)
-      player\sendMessage(" - #{item} : #{weight}")
+    for _, k in ipairs(keys)
+      player\sendMessage("#{WEIGHTS[k]} : #{String.titleCase(k)}")
 
 return LootWhale

@@ -2,6 +2,7 @@ ChestManager = require("ChestManager")
 Inventory = require("wrapper.Inventory")
 Scoreboard = require("wrapper.Scoreboard")
 Storage = require("wrapper.Storage")
+WEIGHTS = require("weights")
 
 class LootWhale
   new: (p) =>
@@ -12,6 +13,7 @@ class LootWhale
     @chestManager = ChestManager(storage)
 
     p.addCommand({name: "ownchest"}, self\ownChest)
+    p.addCommand({name: "lootweights"}, self\lootWeights)
     p.registerEvent("InventoryOpenEvent", self\invOpened)
     p.registerEvent("InventoryCloseEvent", self\invClosed)
 
@@ -58,5 +60,12 @@ class LootWhale
     @ownNextChest[player] = true
 
     player\sendMessage("You will own the next chest you right-click!")
+
+  lootWeights: (e) =>
+    player = e.getSender()
+
+    player\sendMessage("Current item weights:")
+    for item, weight in pairs(WEIGHTS)
+      player\sendMessage(" - #{item} : #{weight}")
 
 return LootWhale

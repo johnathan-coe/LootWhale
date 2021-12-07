@@ -1,4 +1,4 @@
-Gson = newInstance("com.google.gson.Gson", {})
+Gson = newInstance("com.google.gson.Gson", nil)
 Map = javaImport "java.util.Map"
 JsonObject = () -> newInstance("com.google.gson.JsonObject")
 
